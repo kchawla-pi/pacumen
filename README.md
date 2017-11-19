@@ -10,7 +10,7 @@ To that end, **Pacumen** will be an implementation of the [Pacman AI project](ht
 
 ### 8 Puzzle
 
-The file [eightpuzzle.py](https://github.com/jeffnyman/pacumen/blob/master/eightpuzzle.py) contains an implementation of an 8 puzzle board representation. Specifically, the entire state of such a puzzle board is encoded as the [EightPuzzleState](https://github.com/jeffnyman/pacumen/blob/master/eightpuzzle.py#L8) The search problem for this board (getting the blank location in the top left) is encoded as the [EightPuzzleSearchProblem](https://github.com/jeffnyman/pacumen/blob/master/eightpuzzle.py#L209).
+The file [eightpuzzle.py](https://github.com/jeffnyman/pacumen/blob/master/eightpuzzle.py) contains an implementation of an 8 puzzle board representation. Specifically, the entire state of such a puzzle board is encoded as the [EightPuzzleState](https://github.com/jeffnyman/pacumen/blob/master/eightpuzzle.py#L8). The search problem for this board (getting the blank location in the top left) is encoded as the [EightPuzzleSearchProblem](https://github.com/jeffnyman/pacumen/blob/master/eightpuzzle.py#L209).
 
 The nature a search problem, in general, is encoded as a [SearchProblem](https://github.com/jeffnyman/pacumen/blob/master/agents_search.py) The EightPuzzleSearchProblem implements this class and thus must provide methods that are implemented.
 
@@ -28,3 +28,8 @@ In order to actually solve the problem, algorithms would have to be provided. Th
 
 This is about the bare minimum that you have to have in place to demonstrate a search algorithm. 
 
+### Graphical Display
+
+It will be necessary to eventually start drawing Pac-Man boards and the hardest part of graphics is ... well, the graphics. That's what the [graphical_support.py](https://github.com/jeffnyman/pacumen/blob/master/displays/graphical_support.py) module is attempting to provide. It's a very minimal sort of interface, using TKinter so as to reduce dependencies on alternative (and not built-in) graphics libraries.
+
+This is minimal at best at this point. There is no provision at all for keybinding (meaning, interaction with the graphical display) and no provision at all for animation in the context of the display.
