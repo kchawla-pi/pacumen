@@ -33,3 +33,91 @@ This is about the bare minimum that you have to have in place to demonstrate a s
 It will be necessary to eventually start drawing Pac-Man boards and the hardest part of graphics is ... well, the graphics. That's what the [graphical_support.py](https://github.com/jeffnyman/pacumen/blob/master/displays/graphical_support.py) module is attempting to provide. It's a very minimal sort of interface, using TKinter so as to reduce dependencies on alternative (and not built-in) graphics libraries.
 
 This is minimal at best at this point. There is no provision at all for keybinding (meaning, interaction with the graphical display) and no provision at all for animation in the context of the display.
+
+### Layouts
+
+The graphical display mentioned above has to come from somewhere. Ideally these Pac-Man boards should be easy to create. And "easy to create" and "graphical design" do not always go hand-in-hand. So Pacumen is based on the concept of textual layouts serving as the basis for the graphical layouts.
+
+The idea is that a maze will be encoded as a layout (see [test_maze.lay](https://github.com/jeffnyman/pacumen/blob/master/layouts/test_maze.lay)). This becomes part of an internal layout representation, implemented in [layout.py](https://github.com/jeffnyman/pacumen/blob/master/mechanics/layout.py), which is in turn a type of grid, implemented in [grid.py](https://github.com/jeffnyman/pacumen/blob/master/mechanics/grid.py).  
+
+Consider this layout:
+
+    %%%%%%%
+    %    P%
+    % %%% %
+    %  %  %
+    %%   %%
+    %. %%%%
+    %%%%%%%
+
+Here the % symbols represent the walls of the maze. Any periods represent food dots. The letter P indicates the Pac-Man agent.
+
+Here is the (x,y) representation that Paucmen generates for the above layout:
+
+    0,6  1,6  2,6  3,6  4,6  5,6  6,6
+     %    %    %    %    %    %    %
+    0,5  1,5  2,5  3,5  4,5  5,5  6,5
+     %                        P    %
+    0,4  1,4  2,4  3,4  4,4  5,4  6,4
+     %         %    %    %         %
+    0,3  1,3  2,3  3,3  4,3  5,3  6,3
+     %              %              %
+    0,2  1,2  2,2  3,2  4,2  5,2  6,2
+     %    %                   %    %
+    0,1  1,1  2,1  3,1  4,1  5,1  6,1
+     %    .         %    %    %    %
+    0,0  1,0  2,0  3,0  4,0  5,0  6,0
+     %    %    %    %    %    %    %
+
+Note that the grid treats the lower left corner as the origin, just as in mathematics:
+
+![grid-lower-left](http://testerstories.com/files/pacumen/grid-lower-left.png)
+
+Specifically, the origin in a graph of positive numbers is in the lower-left. In gaming terms, the origin is usually taken to be the top left, due to how pixels are rendered on the screen. However, the basis of Pacumen is ultimately a mathematical representation, which is why it follows that standard.
+
+What this means is that the above should represent as such in a graphical context:
+
+![pacumen-grid](http://testerstories.com/files/pacumen/pacumen-grid.png)
+
+While the above (x,y) representation works, Pacumen actually uses a (y,x) representation, as such:
+
+    6,0  6,1  6,2  6,3  6,4  6,5  6,6
+     %    %    %    %    %    %    %
+    5,0  5,1  5,2  5,3  5,4  5,5  5,6
+     %                        P    %
+    4,0  4,1  4,2  4,3  4,4  4,5  4,6
+     %         %    %    %         %
+    3,0  3,1  3,2  3,3  3,4  3,5  3,6
+     %              %              %
+    2,0  2,1  2,2  2,3  2,4  2,5  2,6
+     %    %                   %    %
+    1,0  1,1  1,2  1,3  1,4  1,5  1,6
+     %    .         %    %    %    %
+    0,0  0,1  0,2  0,3  0,4  0,5  0,6
+     %    %    %    %    %    %    %
+
+Looking at the two grids, I just like how the (y,x) version reads more than the (x,y). Programmatically, as the layout is constructed into a grid, the walls are represented like this:
+
+    TTTTTTT
+    TFFFFFT
+    TFTTTFT
+    TFFTFFT
+    TTFFFTT
+    TFFTTTT
+    TTTTTTT
+
+Here every T is a wall.
+
+The dot locations are represented like this:
+
+    FFFFFFF
+    FFFFFFF
+    FFFFFFF
+    FFFFFFF
+    FFFFFFF
+    FTFFFFF
+    FFFFFFF
+
+Here the dot location -- and there's only one -- is shown as a T (second row up from the bottom).
+
+It's important to note that because the layout is read from the bottom to the top, when the walls or food grid representations are printed, they must be done in reverse.
