@@ -1,7 +1,7 @@
 import os
 import sys
 import random
-from grid import Grid
+from mechanics.grid import Grid
 
 
 class Layout:
